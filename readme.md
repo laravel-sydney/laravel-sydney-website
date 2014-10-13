@@ -1,9 +1,9 @@
-# Build A blog in 30 minutes using Laravel 
+# Build a blog using Laravel 
 
 
-In this guide you will learn how to use the power of Laravel, Composer and Open Source to build the admin system for writing blogs in 30 minutes.
+In this guide you will learn how to use the power of Laravel, Composer and Open Source to build the admin system for writing blogs in roughly 30 minutes.
 
-We will be using a couple of noteworthy packages to make our job a lot easier, as well as some others which just make the job that little bit easier.
+We will be using a couple of noteworthy packages to make our job a lot easier.
 
 ##Step-by-step guide
 
@@ -273,7 +273,9 @@ In app/config/packages/rydurham/sentinel/config.php
       ],
       
 
-###Copy the layout of the admin package from /app/routes/packages/rydurham/sentinel/layouts/default.blade.php to app/routes/layouts/scaffold.php
+###Use master view published by Sentinel as our main admin layout
+
+Copy the layout of the admin package from /app/routes/packages/rydurham/sentinel/layouts/default.blade.php to app/routes/layouts/scaffold.php
 
 ###Add posts url to header of app/routes/layouts/scaffold.blade.php
 
