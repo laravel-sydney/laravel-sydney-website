@@ -62,13 +62,13 @@ Before doing this make sure you have a database setup. If you don't set one up n
 
 ###Configure your environment
 
-In terminal run: 
+In terminal run the command below to get the hostname of your computer: 
 
     
     hostname 
     
 
-You will receive the hostname of your computer which is what is used to identify your environment. Paste the hostname result in bootstrap/start.php (In my case its 'shauns-mbp.fritz.box')
+The hostname is what is used to identify your environment. Paste the hostname result in bootstrap/start.php (In my case the hostname is 'shauns-mbp.fritz.box').
 
     
     /*
@@ -89,7 +89,7 @@ You will receive the hostname of your computer which is what is used to identify
     ));
     
 
-Now that we have our local environment defined, let's turn on debugging and our URL route to the public folder.
+Now that we have our local environment defined, let's turn on debugging and set our URL route to the public folder.
 
 Edit your app/config/local/app.php 
 
@@ -105,7 +105,7 @@ Edit your app/config/local/app.php
     php artisan migrate:install
     
 
-Please Note: If you receive the error "Access denied for user..." you should try the following:
+Please Note: If you receive the error "Access denied for user..." try the following:
 
     
     php artisan migrate:install --env=local
@@ -115,7 +115,7 @@ Please Note: If you receive the error "Access denied for user..." you should try
 
 The first package we will setup is Sentinel. It's a package written for Laravel to harness to power of Sentury (https://github.com/cartalyst/sentry), which is a well-known "framework agnostic authentication & authorisation system".
 
-This package does all of the heavy lifting for you. It comes with all routes, controllers, view, migrations, seeds, configs. Literally everything that a package can handle for you in Laravel.
+This package does all of the heavy lifting for you. It comes with all routes, controllers, view, migrations, seeds and configs. Literally everything that a package can offer is used in Sentinel.
 
 Run the migrations:
 
@@ -160,13 +160,23 @@ We now have an authenitcation system for our application!
 
 ###Install Posts - https://github.com/JeffreyWay/Laravel-4-Generators
 
-
+Jeffrew Way's Generators package allows you to generate the entire boilerplate of code for building basic database models.
 
     
     php artisan generate:scaffold post --fields="title:string, body:text"
     
 
-Seed the data:
+
+####Add generated route
+
+You will receive a success message along with the code for the route for the model. Let's add this to the app/routes.php file:
+
+    
+    Route::resource('posts', 'PostsController');
+    
+
+####Seed the data
+
 Update database/seeds/DatabaseSeeder.php
 
     
@@ -187,27 +197,40 @@ Update database/seeds/PostsTableSeeder.php
     ]);
     
 
-Seed the Data:
+Seed the data:
 
     
     php artisan db:seed
     
 
-Create Views:
+We now have out database table, controllers and routes covered. Let's move on to the views.
+
+###Create Views - https://github.com/the0rem/FAT-CRUD
+
+Jeffrey Way's Generators package used to handle building views, but the functionality has since been removed. Seeing as this guide would be less impressive if everything wasn't done for you, I've decided to fill the view generating vaccum. Run the command below to create the CRUD pages for your "posts" database table.
 
     
     php artisan crud:create posts
     
 
-###Load Root URL
+The views have now been created.
 
-If you receive an error with writing to log run the following:
+###Test homepage
+
+Try to navigate to your homepage. If you receive an error with writing to logs run the following:
 
     
     chmod -R 777 app/storage/
     
 
 ###Add authentication for accessing posts routes
+
+We have the routes for our PostsController defined however we can improve on this. We're going to do a couple of things:
+ - Prefix the PostsController urls with '/admin/'
+ - Add an authentication filter for accessing anything under '/admin/'
+ - Explicitly name the different methods of the PostsController
+
+Update the app/routes.php with the code below:
 
     
     Route::group([
@@ -280,10 +303,12 @@ Copy the layout of the admin package from /app/routes/packages/rydurham/sentinel
 ###Add posts url to header of app/routes/layouts/scaffold.blade.php
 
     
-    <li {{ (Request::is('*users*') ? 'class="active"' : '') }}><a href="{{ URL::action('Sentinel\UserController@index') }}">Users</a></li>
+    <li {{ (Request::is('*users*')  ? 'class="active"' : '') }}><a href="{{ URL::action('Sentinel\UserController@index') }}">Users</a></li>
     <li {{ (Request::is('*groups*') ? 'class="active"' : '') }}><a href="{{ URL::action('Sentinel\GroupController@index') }}">Groups</a></li>
-    <li {{ (Request::is('*post*') ? 'class="active"' : '') }}><a href="{{ route('posts.index') }}">Posts</a></li>
+    <li {{ (Request::is('*post*')   ? 'class="active"' : '') }}><a href="{{ route('posts.index') }}">Posts</a></li>
     
 
-#Done!
+###Done!
+
+Congratulations on finishing the blog!
 
